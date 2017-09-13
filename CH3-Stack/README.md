@@ -2,7 +2,7 @@
 
 堆疊是一種遵從後進先出 (LIFO, Last In First Out) 的有序集合.
 
-#### 定義堆疊 
+#### 建立堆疊 
 
 ```javascript
 function Stack () {

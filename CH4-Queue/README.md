@@ -98,9 +98,9 @@ function hotPotatoGame (nameList, num) {
     eliminated = queue.dequeue();
     console.log(eliminated + ' 在燙手山芋遊戲中被淘汰');
   }
-  var winner = queue.dequeue();
-  console.log('勝利者 : ' + winner);  
+  return queue.dequeue();    
 }
 var names = ['John', 'Jack', 'Camila', 'Ingrid', 'Carl'];
 var winner = hotPotatoGame(names, 7);
+console.log('勝利者 : ' + winner);
 ```

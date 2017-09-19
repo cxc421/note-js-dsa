@@ -1,6 +1,13 @@
 ### Chapter 2 - 鏈結串列 ( Linked List )
 
-#### 單向鏈結串列
+Linked List 相較於 Array，元素的記憶體位置不需要連續。  
+因此在 list 中間新增或移除元素時，不需要移動其他元素的位置，這會比 Array 有效率。  
+但缺點就是存取元素時只能從 head 或 tail 循序的尋找，存取速度會比 Array 慢。  
+
+#### 單向鏈結串列   
+
+單向鏈結每個元素含有一個 element 代表此元素的值，以及一個 next 代表下一個元素 ( 最後一個元素的 next 值為 null )。  
+鏈結會有一個 head 指向第一個元素，因此可利用 head 及每個元素的 next 來存取所有元素。  
 
 ```javascript
 var LinkedList = (function(){
@@ -126,7 +133,12 @@ var LinkedList = (function(){
 
 ```
 
-#### 雙向鏈結串列
+#### 雙向鏈結串列   
+
+雙鏈結每個元素含有一個 element 代表此元素的值，一個 next 代表下一個元素 ( 最後一個元素的 next 值為 null )，一個 prev 代表上一個元素 ( 第一個元素的 prev 值為 null )。  
+鏈結會有一個 head 指向第一個元素，以及一個 tail 指向最後一個元素。  
+因此可利用 head 搭配每個元素的 next 來存取所有元素，或是用 tail 搭配每個元素的 prev 存取所有元素。  
+這樣在存取特定位置的元素時，可以先判斷比較靠近 head 或是 tail，再決定從哪個方向循序存取，以提升存取速度。
 
 ```javascript
 var DoublyLinkedList = (function(){
@@ -323,4 +335,204 @@ var DoublyLinkedList = (function(){
   
   return DoublyLinkedList;
 })();
+```
+
+#### 環狀鏈結串列   
+
+環狀鏈結串列可以是單向或是雙向的。  
+若是單向環狀鏈結串列，最後一個元素的 next 不是 null 而是指向第一個元素。  
+若是雙向環狀鏈結串列，最後一個元素的 next 不是 null 而是指向第一個元素，第一個元素的 prev 也不是 null 而是指向最後一個元素。  
+以下展示單向環狀鏈結的程式碼。
+
+```javascript
+function CircularLinkedList() {
+
+    let Node = function(element){
+
+        this.element = element;
+        this.next = null;
+    };
+
+    let length = 0;
+    let head = null;
+
+    this.append = function(element){
+
+        let node = new Node(element),
+            current;
+
+        if (head === null){ //first node on list
+            head = node;
+        } else {
+
+            current = head;
+
+            //loop the list until find last item
+            while(current.next !== head){ //last element will be head instead of NULL
+                current = current.next;
+            }
+
+            //get last item and assign next to added item to make the link
+            current.next = node;
+        }
+
+        //set node.next to head - to have circular list
+        node.next = head;
+
+        length++; //update size of list
+    };
+
+    this.insert = function(position, element){
+
+        //check for out-of-bounds values
+        if (position >= 0 && position <= length){
+
+            let node = new Node(element),
+                current = head,
+                previous,
+                index = 0;
+
+            if (position === 0){ //add on first position
+                
+                if(!head){ // if no node  in list
+                    head = node;
+                    node.next = head;
+                }else{
+                    node.next = current;
+
+                    //update last element
+                    while(current.next !== head){ //last element will be head instead of NULL
+                        current = current.next;
+                    }
+
+                    head = node;
+                    current.next = head;
+                }
+                
+
+            } else {
+                while (index++ < position){
+                    previous = current;
+                    current = current.next;
+                }
+                node.next = current;
+                previous.next = node;
+            }
+
+            length++; //update size of list
+
+            return true;
+
+        } else {
+            return false;
+        }
+    };
+
+    this.removeAt = function(position){
+
+        //check for out-of-bounds values
+        if (position > -1 && position < length){
+
+            let current = head,
+                previous,
+                index = 0;
+
+            //removing first item
+            if (position === 0){
+
+                while(current.next !== head){ //needs to update last element first
+                    current = current.next;
+                }
+
+                head = head.next;
+                current.next = head;
+
+            } else { //no need to update last element for circular list
+
+                while (index++ < position){
+
+                    previous = current;
+                    current = current.next;
+                }
+
+                //link previous with current's next - skip it to remove
+                previous.next = current.next;
+            }
+
+            length--;
+
+            return current.element;
+
+        } else {
+            return null;
+        }
+    };
+
+    this.remove = function(element){
+
+        let index = this.indexOf(element);
+        return this.removeAt(index);
+    };
+
+    this.indexOf = function(element){
+
+        let current = head,
+            index = -1;
+
+        //check first item
+        if (element == current.element){
+            return 0;
+        }
+
+        index++;
+
+        //check in the middle of the list
+        while(current.next !== head){
+
+            if (element == current.element){
+                return index;
+            }
+
+            current = current.next;
+            index++;
+        }
+
+        //check last item
+        if (element == current.element){
+            return index;
+        }
+
+        return -1;
+    };
+
+    this.isEmpty = function() {
+        return length === 0;
+    };
+
+    this.size = function() {
+        return length;
+    };
+
+    this.getHead = function(){
+        return head;
+    };
+
+    this.toString = function(){
+
+        let current = head,
+            s = current.element;
+
+        while(current.next !== head){
+            current = current.next;
+            s += ', ' + current.element;
+        }
+
+        return s.toString();
+    };
+
+    this.print = function(){
+        console.log(this.toString());
+    };
+}
+
 ```

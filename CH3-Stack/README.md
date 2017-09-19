@@ -1,4 +1,4 @@
-### Chapter 2 - 堆疊 ( Stack )
+### Chapter 3 - 堆疊 ( Stack )
 
 堆疊是一種遵從後進先出 (LIFO, Last In First Out) 的有序集合.
 

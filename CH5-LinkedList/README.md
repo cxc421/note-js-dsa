@@ -1,4 +1,4 @@
-### Chapter 2 - 鏈結串列 ( Linked List )
+### Chapter 5 - 鏈結串列 ( Linked List )
 
 Linked List 相較於 Array，元素的記憶體位置不需要連續。  
 因此在 list 中間新增或移除元素時，不需要移動其他元素的位置，這會比 Array 有效率。  

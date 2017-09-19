@@ -1,4 +1,4 @@
-### Chapter 2 - 佇列 ( Queue )
+### Chapter 4 - 佇列 ( Queue )
 
 佇列是一種遵從先進先出 (FIFO, First In First Out) 的有序集合.
 

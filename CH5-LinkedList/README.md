@@ -122,7 +122,7 @@ var LinkedList = (function(){
       return this.length;
     },
     getHead: function () {
-      return head;
+      return this.head;
     },
     print: function () {
       console.log(this.toString());
